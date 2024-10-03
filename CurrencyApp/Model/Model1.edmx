@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CurrencyRateModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TblCurrencies">
+          <Key>
+            <PropertyRef Name="currencyId" />
+          </Key>
+          <Property Name="currencyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="currencyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="currnecySymbol" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="TblCurrencyPrices">
+          <Key>
+            <PropertyRef Name="preisId" />
+          </Key>
+          <Property Name="preisId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="currencyName" Type="int" />
+          <Property Name="currencyBuying" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="currencySelling" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="date" Type="date" />
+        </EntityType>
+        <EntityType Name="TblOperations">
+          <Key>
+            <PropertyRef Name="operetionId" />
+          </Key>
+          <Property Name="operetionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customenrName" Type="nvarchar" MaxLength="50" />
+          <Property Name="customerSurname" Type="nvarchar" MaxLength="50" />
+          <Property Name="currencyCode" Type="int" />
+          <Property Name="operationType" Type="nvarchar" MaxLength="10" />
+          <Property Name="currentValue" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="totalPrice" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="operationDate" Type="date" />
+        </EntityType>
+        <Association Name="FK_TblCurrencyPrices_TblCurrencies">
+          <End Role="TblCurrencies" Type="Self.TblCurrencies" Multiplicity="0..1" />
+          <End Role="TblCurrencyPrices" Type="Self.TblCurrencyPrices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblCurrencies">
+              <PropertyRef Name="currencyId" />
+            </Principal>
+            <Dependent Role="TblCurrencyPrices">
+              <PropertyRef Name="currencyName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblOperations_TblCurrencies">
+          <End Role="TblCurrencies" Type="Self.TblCurrencies" Multiplicity="0..1" />
+          <End Role="TblOperations" Type="Self.TblOperations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblCurrencies">
+              <PropertyRef Name="currencyId" />
+            </Principal>
+            <Dependent Role="TblOperations">
+              <PropertyRef Name="currencyCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CurrencyRateModelStoreContainer">
+          <EntitySet Name="TblCurrencies" EntityType="Self.TblCurrencies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblCurrencyPrices" EntityType="Self.TblCurrencyPrices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TblOperations" EntityType="Self.TblOperations" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TblCurrencyPrices_TblCurrencies" Association="Self.FK_TblCurrencyPrices_TblCurrencies">
+            <End Role="TblCurrencies" EntitySet="TblCurrencies" />
+            <End Role="TblCurrencyPrices" EntitySet="TblCurrencyPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblOperations_TblCurrencies" Association="Self.FK_TblOperations_TblCurrencies">
+            <End Role="TblCurrencies" EntitySet="TblCurrencies" />
+            <End Role="TblOperations" EntitySet="TblOperations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CurrencyRateModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TblCurrency">
+          <Key>
+            <PropertyRef Name="currencyId" />
+          </Key>
+          <Property Name="currencyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="currencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="currnecySymbol" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="TblCurrencyPrices" Relationship="Self.FK_TblCurrencyPrices_TblCurrencies" FromRole="TblCurrencies" ToRole="TblCurrencyPrices" />
+          <NavigationProperty Name="TblOperations" Relationship="Self.FK_TblOperations_TblCurrencies" FromRole="TblCurrencies" ToRole="TblOperations" />
+        </EntityType>
+        <EntityType Name="TblCurrencyPrice">
+          <Key>
+            <PropertyRef Name="preisId" />
+          </Key>
+          <Property Name="preisId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="currencyName" Type="Int32" />
+          <Property Name="currencyBuying" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="currencySelling" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="TblCurrency" Relationship="Self.FK_TblCurrencyPrices_TblCurrencies" FromRole="TblCurrencyPrices" ToRole="TblCurrencies" />
+        </EntityType>
+        <EntityType Name="TblOperation">
+          <Key>
+            <PropertyRef Name="operetionId" />
+          </Key>
+          <Property Name="operetionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customenrName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="customerSurname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="currencyCode" Type="Int32" />
+          <Property Name="operationType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="currentValue" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="totalPrice" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="operationDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="TblCurrency" Relationship="Self.FK_TblOperations_TblCurrencies" FromRole="TblOperations" ToRole="TblCurrencies" />
+        </EntityType>
+        <Association Name="FK_TblCurrencyPrices_TblCurrencies">
+          <End Role="TblCurrencies" Type="Self.TblCurrency" Multiplicity="0..1" />
+          <End Role="TblCurrencyPrices" Type="Self.TblCurrencyPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblCurrencies">
+              <PropertyRef Name="currencyId" />
+            </Principal>
+            <Dependent Role="TblCurrencyPrices">
+              <PropertyRef Name="currencyName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TblOperations_TblCurrencies">
+          <End Role="TblCurrencies" Type="Self.TblCurrency" Multiplicity="0..1" />
+          <End Role="TblOperations" Type="Self.TblOperation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TblCurrencies">
+              <PropertyRef Name="currencyId" />
+            </Principal>
+            <Dependent Role="TblOperations">
+              <PropertyRef Name="currencyCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CurrencyRateEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TblCurrencies" EntityType="Self.TblCurrency" />
+          <EntitySet Name="TblCurrencyPrices" EntityType="Self.TblCurrencyPrice" />
+          <EntitySet Name="TblOperations" EntityType="Self.TblOperation" />
+          <AssociationSet Name="FK_TblCurrencyPrices_TblCurrencies" Association="Self.FK_TblCurrencyPrices_TblCurrencies">
+            <End Role="TblCurrencies" EntitySet="TblCurrencies" />
+            <End Role="TblCurrencyPrices" EntitySet="TblCurrencyPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TblOperations_TblCurrencies" Association="Self.FK_TblOperations_TblCurrencies">
+            <End Role="TblCurrencies" EntitySet="TblCurrencies" />
+            <End Role="TblOperations" EntitySet="TblOperations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CurrencyRateModelStoreContainer" CdmEntityContainer="CurrencyRateEntities">
+          <EntitySetMapping Name="TblCurrencies">
+            <EntityTypeMapping TypeName="CurrencyRateModel.TblCurrency">
+              <MappingFragment StoreEntitySet="TblCurrencies">
+                <ScalarProperty Name="currencyId" ColumnName="currencyId" />
+                <ScalarProperty Name="currencyName" ColumnName="currencyName" />
+                <ScalarProperty Name="currnecySymbol" ColumnName="currnecySymbol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblCurrencyPrices">
+            <EntityTypeMapping TypeName="CurrencyRateModel.TblCurrencyPrice">
+              <MappingFragment StoreEntitySet="TblCurrencyPrices">
+                <ScalarProperty Name="preisId" ColumnName="preisId" />
+                <ScalarProperty Name="currencyName" ColumnName="currencyName" />
+                <ScalarProperty Name="currencyBuying" ColumnName="currencyBuying" />
+                <ScalarProperty Name="currencySelling" ColumnName="currencySelling" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TblOperations">
+            <EntityTypeMapping TypeName="CurrencyRateModel.TblOperation">
+              <MappingFragment StoreEntitySet="TblOperations">
+                <ScalarProperty Name="operetionId" ColumnName="operetionId" />
+                <ScalarProperty Name="customenrName" ColumnName="customenrName" />
+                <ScalarProperty Name="customerSurname" ColumnName="customerSurname" />
+                <ScalarProperty Name="currencyCode" ColumnName="currencyCode" />
+                <ScalarProperty Name="operationType" ColumnName="operationType" />
+                <ScalarProperty Name="currentValue" ColumnName="currentValue" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="totalPrice" ColumnName="totalPrice" />
+                <ScalarProperty Name="operationDate" ColumnName="operationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

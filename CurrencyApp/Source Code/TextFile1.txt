@@ -1,0 +1,7 @@
+﻿string link = "https://www.tcmb.gov.tr/kurlar/today.xml";
+var xmlDoc = new XmlDocument();
+xmlDoc.Load(link);
+string dollarBuying = xmlDoc.SelectSingleNode("Tarih_Date/Currency[@Kod='USD']/BanknoteBuying").InnerXml;
+string dollarSelling = xmlDoc.SelectSingleNode("Tarih_Date/Currency[@Kod='USD']/BanknoteSelling").InnerXml;
+Console.WriteLine(dollarBuying);
+Console.WriteLine(dollarSelling);
